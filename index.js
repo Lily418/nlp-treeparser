@@ -1,13 +1,10 @@
-var LSU = require('./server/lsu.js');
-var pos = require('pos');
-var natural = require('natural');
 var d3 = require('d3');
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var sentenceToTree = require('./nlp/sentenceToTree.js');
 
 var app = express();
-var tokenizer = new natural.TreebankWordTokenizer();
 
 var server = app.listen(3000, function () {
   console.log('app listening on 3000');
@@ -54,14 +51,3 @@ app.post('/feedback', function(req, res) {
     res.send('Feedback appended!');
   });
 });
-
-var sentenceToTree = function(sentence) {
-  var words = tokenizer.tokenize(sentence);
-  var taggedWords = new pos.Tagger().tag(words);
-  taggedWords = LSU.processWords(taggedWords);
-
-  console.log(taggedWords);
-
-  var results = LSU.parse(taggedWords);
-  return results;
-};
