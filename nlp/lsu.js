@@ -1,6 +1,8 @@
 // LSU (list-based search with uniqueness) based on algorithm here:
 // http://web.stanford.edu/~mjkay/covington.pdf
 var negWords = require('./negationList.js');
+var nlp_compromise = require("nlp_compromise");
+
 
 var List = function () {
   this.head = null;
@@ -155,40 +157,30 @@ var simplifyPOS = function (pos) {
   var simplePos;
 
   var posTranslate = {
-    'CC': 'conj',
-    'PP': 'adj',
-    'PP$': 'adj', // possessive pronoun
-    'PDT': 'adj', // predeterminer
-    'DT': 'adj', // determiner
-    'CD': 'adj', // cardinal number
-    'JJ': 'adj', // adjective
-    'JJR': 'adj', // adj, comparative
-    'JJS': 'adj', // adj, superlative
-    'NN': 'noun', // noun
-    'NNP': 'noun', // proper noun
-    'NNPS': 'noun', // plural proper noun
-    'NNS': 'noun', // plural noun
-    'PRP': 'noun', // personal pronoun
-    'RB': 'adv', //adverb
-    'MD': 'verb', // modal (can, should)
-    'VB': 'verb', // verb base form
-    'VBD': 'verb', // verb past tense
-    'VBP': 'verb', // verb present
-    'VBZ': 'verb', // verb present
-    'VBG': 'verb', // gerund - may have to do something special
-    'IN': 'prep', // preposition
-    'TO': 'prep', // to
-    'SYM': 'sym', // +,%,&
-    ':': 'sym', // mid-sentence punctuation
-    '$': 'sym', // $
-    '#': 'sym', // #
-    '"': 'quote',
-    '(': 'lparen',
-    ')': 'rparen',
-    'WDT': 'adj', // wh-determiner
-    'WP': 'noun', // wh-pronoun
-    'WP$': 'adj', // possessive-wh
-    'WRB': 'adv', // wh adverb
+    'Acronym': 'noun',
+    'Plural': 'noun',
+    'Noun': 'noun',
+    'Posessive': 'adj',
+    'Value': 'adj',
+    'Pronoun': 'noun',
+    'Determiner': 'adj',
+    'Conjunction': 'conj',
+    'Preposition': 'prep',
+    'Verb': 'verb',
+    'PastTense': 'verb',
+    'FutureTense': 'verb',
+    'Infinitive': 'verb',
+    'PresentTense': 'verb',
+    'Gerund': 'verb',
+    'Copula': 'verb',
+    'Modal': 'verb',
+    'Adjective': 'adj',
+    'Comparative': 'adj',
+    'Superlative': 'adj',
+    'Adverb': 'adv',
+    'Person': 'noun',
+    'Place': 'noun',
+    'Organisation': 'noun'
   };
 
 
@@ -423,33 +415,14 @@ var outranks = function (word1, word2) {
 };
 
 var processWords = function (words) {
-  var isNeg = false;
   return words.map(function(word, i) {
-    isNeg = false;
-    if (word[0] in negWords) {
-      isNeg = true;
+    var isNeg = false;
+    
+    if(word[0].pos['Verb']) {
+      isNeg = nlp_compromise.verb(words[0].text).isNegative()
     }
-    if (word[0] === "'s") {
-      word[1] = 'POS';
-    }
-    if (word[0] === "n't") {
-      word[1] = 'RB';
-    }
-    if (word[0] === "ca" && words[i+1][0] === "n't") {
-      word[0] = "can";
-      word[1] = "VB";
-    }
-    if (i > 0) {
-      // like and love should be verbs if they come right after a noun
-      if (word[0] === 'like' || word[0] === 'likes' || word[0] === 'love' || word[0] === 'loves' ||
-        word[0] === 'liked' || word[0] === 'loved') {
-        var prevTag = words[i-1][1];
-        if (prevTag === 'NN' || prevTag === 'NNP' || prevTag === 'NNPS' || prevTag === 'NNS' || prevTag === 'PRP') {
-          word[1] = 'VB';
-        }
-      }
-    }
-    return {word: word[0], tag: word[1], negator: isNeg, negated: false, index: i};
+
+    return {word: word[0].text, tag: word[1], negator: isNeg, negated: false, index: i};
   });
 };
 
@@ -600,4 +573,3 @@ exports.getArcs = getArcs;
 exports.parse = parse;
 exports.processWords = processWords;
 // parse(taggedWords);
-
