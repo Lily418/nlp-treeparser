@@ -9,8 +9,6 @@ var sentenceToTree = function(sentence) {
 
   taggedWords = LSU.processWords(taggedWords);
 
-  console.log(taggedWords);
-
   var results = LSU.parse(taggedWords);
   return results;
 };

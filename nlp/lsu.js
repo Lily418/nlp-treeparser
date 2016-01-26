@@ -511,7 +511,7 @@ var getArcs = function(wordData) {
       headList.addToHead(w);
     }
   });
-  console.log(deps);
+  //console.log(deps);
   var x = headList.head;
   var root;
   while (x) {
