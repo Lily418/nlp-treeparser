@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "browserify": "mkdir -p dist && node_modules/.bin/browserify nlp/sentenceToTree.js --standalone nlp-treeparser -o dist/sentenceToTreeBundle.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,8 +13,11 @@
     "body-parser": "^1.12.4",
     "d3": "^3.5.5",
     "express": "^4.12.4",
-    "natural": "^0.2.1",
+    "nlp_compromise": "^2.0.1",
     "pos": "^0.1.9",
     "retext": "^0.5.1"
+  },
+  "devDependencies": {
+    "browserify": "^12.0.1"
   }
 }
