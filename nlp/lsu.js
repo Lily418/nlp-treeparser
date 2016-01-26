@@ -3,17 +3,6 @@
 var negWords = require('./negationList.js');
 var nlp_compromise = require("nlp_compromise");
 
-
-function RootNotFoundError(message) {
-  this.name = "RootNotFound";
-  this.message = message;
-  this.stack = (new Error()).stack;
-}
-
-RootNotFoundError.prototype = Object.create(Error.prototype);
-RootNotFoundError.prototype.constructor = RootNotFoundError;
-
-
 var List = function () {
   this.head = null;
   this.tail = null;
@@ -542,7 +531,7 @@ var parse = function(wordData) {
   var root = arcData.head;
 
   if(typeof root === 'undefined') {
-    throw new RootNotFoundError("Could not determine root of parse tree")
+    return undefined;
   }
 
   var tree = new Tree(root.value);
