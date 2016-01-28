@@ -1,6 +1,5 @@
 var LSU = require('./lsu.js');
 var nlp_compromise = require("nlp_compromise");
-console.log(nlp_compromise)
 var sentenceToTree = function(text) {
   //Split sentence into a list of words
 
