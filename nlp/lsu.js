@@ -156,33 +156,14 @@ var simplifyPOS = function (pos) {
   var simplePos;
 
   var posTranslate = {
-    'Acronym': 'noun',
-    'Plural': 'noun',
-    'Noun': 'noun',
-    'Posessive': 'adj',
-    'Value': 'adj',
-    'Pronoun': 'noun',
-    'Determiner': 'adj',
-    'Conjunction': 'conj',
-    'Preposition': 'prep',
-    'Verb': 'verb',
-    'PastTense': 'verb',
-    'FutureTense': 'verb',
-    'Infinitive': 'verb',
-    'PresentTense': 'verb',
-    'Gerund': 'verb',
-    'Copula': 'verb',
-    'Modal': 'verb',
-    'Adjective': 'adj',
-    'Comparative': 'adj',
-    'Superlative': 'adj',
-    'Adverb': 'adv',
-    'Person': 'noun',
-    'Place': 'noun',
-    'Organisation': 'noun'
+    "adjective" : "adj",
+    "adverb": "adv",
+    "IN": "prep",
+    "MD": "verb",
+    "CC": "conj",
+    "DT": "adj",
+    "value": "adj"
   };
-
-
 
   // list of POS abbrevs that just return themselves
   // . (end of sentence)
@@ -417,11 +398,11 @@ var processWords = function (words) {
   return words.map(function(word, i) {
     var isNeg = false;
     
-    if(word[0].pos['Verb']) {
-      isNeg = nlp_compromise.verb(words[0].text).isNegative()
+    if(word[1] == "verb") {
+      isNeg = nlp_compromise.verb(words[0].text).negative()
     }
 
-    return {word: word[0].text, tag: word[1], negator: isNeg, negated: false, index: i};
+    return {word: word[0], tag: word[1], negator: isNeg, negated: false, index: i};
   });
 };
 

@@ -13,7 +13,7 @@
     "body-parser": "^1.12.4",
     "d3": "^3.5.5",
     "express": "^4.12.4",
-    "nlp_compromise": "2.0.0",
+    "nlp_compromise": "1.1.5",
     "retext": "^0.5.1"
   },
   "devDependencies": {
