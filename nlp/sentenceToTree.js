@@ -15,10 +15,14 @@ var sentenceToTree = function(text) {
     });
   });
 
-  taggedWords = LSU.processWords(taggedSentences[0]);
+  if(taggedSentences[0]) {
+    taggedWords = LSU.processWords(taggedSentences[0]);
+    var results = LSU.parse(taggedWords);
+    return results;
+  } else {
+    return undefined;
+  }
 
-  var results = LSU.parse(taggedWords);
-  return results;
 };
 
 module.exports = sentenceToTree;
